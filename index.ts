@@ -90,20 +90,13 @@ const loopInterval : number = +process.env.LOOP_INTERVAL;
     }).catch(e => {
         console.log('Could not resolve login checkpoint:', e, e.stack)
     }).then(async () => {
-        let waitSeconds = 5000;
-        let i = 0;
-
-        console.log(`Refreshing Instagram, at ${new Date()}`);
-        // console.log(`Refreshing Instagram, scheduled for ${fireDate}, at ${new Date()}`);
-        console.log("getting user stories");
-        let userStoryFeed = ig.feed.userStory(storyUserPk);
-        console.log("getting user stories items", new Date().toLocaleTimeString());
-        let storyFeedItems = await userStoryFeed.items();
-        console.log("storyFeedItems length: ", storyFeedItems.length);
-
-
-
-        let interval = setInterval(async () => {
+        let waitSeconds = 5000; // To throttle down requests to the api
+        let getStories = async () => {
+            console.log("getting user stories");
+            let userStoryFeed = ig.feed.userStory(storyUserPk);
+            console.log("getting user stories items", new Date().toLocaleTimeString());
+            let storyFeedItems = await userStoryFeed.items();
+            console.log("storyFeedItems length: ", storyFeedItems.length);
             console.log("STARTING LOOP", new Date().toLocaleTimeString());
             console.log("\n");
             for (let storyFeedItem of storyFeedItems) {
@@ -118,11 +111,13 @@ const loopInterval : number = +process.env.LOOP_INTERVAL;
                 let finalMedia = mediaInfo.items[0];
                 console.log("INITIATE DOWNLOAD FOR: " + storyFeedItem.id, new Date().toLocaleTimeString());
                 downloadStory(finalMedia);
-                i++;
                 console.log("END OF THE LOOP FOR: " + storyFeedItem.id, new Date().toLocaleTimeString());
                 console.log("\n");
             }
-        }, loopInterval);
+        };
+
+        await getStories();
+        let interval = setInterval(getStories, loopInterval);
 
         // refreshSchedule = schedule.scheduleJob('*/10 * * * * *', async function (fireDate) {
         //
