@@ -15,7 +15,7 @@ let refreshSchedule;
 let ig;
 util.inspect.defaultOptions.maxArrayLength = null;
 const igUser = process.env.IG_USERNAME;
-// const igPass = process.env.IG_PASSWORD;
+let igPass = process.env.IG_PASSWORD;
 const storyUserPk = process.env.STORY_USER_PK;
 const loopInterval : number = +process.env.LOOP_INTERVAL;
 
@@ -29,13 +29,17 @@ const loopInterval : number = +process.env.LOOP_INTERVAL;
     //     },
     // ]);
     console.log("Username: " + igUser);
-    const { igPass } = await inquirer.prompt([
-        {
-            type: 'password',
-            name: 'igPass',
-            message: 'Password',
-        },
-    ]);
+
+    if (!igPass) {
+        igPass = await inquirer.prompt([
+            {
+                type: 'password',
+                name: 'igPass',
+                message: 'Password',
+            },
+        ]);
+    }
+
     // const { storyUserPk } = await inquirer.prompt([
     //     {
     //         type: 'input',
