@@ -54,6 +54,8 @@ const loopInterval : number = +process.env.LOOP_INTERVAL;
     Bluebird.try(async () => {
         const auth = await ig.account.login(igUser, igPass);
         console.log("Logged in as: ", auth.username);
+        let trackingUser = await ig.user.info(storyUserPk);
+        console.log("Tracking: ", trackingUser.username);
         console.log('\n');
     }).catch(instagram.IgLoginTwoFactorRequiredError, async (e) => {
         console.log("User has Two Factor Authentication enabled.");
