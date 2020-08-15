@@ -7,6 +7,10 @@ Some parts of the code were taken from [instagram-storysaver](https://github.com
 
 
 Npm install
+
 Tsc index.ts
+
 rename .env.example to .env
+
 node index.js
+
