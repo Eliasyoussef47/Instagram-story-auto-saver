@@ -14,3 +14,5 @@ Download files
 `` tsc index.ts ``
 
 Make a copy of the .env.example file and name it .env and fill it
+
+`` node index.js ``
